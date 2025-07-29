@@ -11,7 +11,7 @@ function VerifyByHash() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const res = await axios.get(`http://localhost:5000/api/certificate/verify/${hash}`);
+        const res = await axios.get(`http://192.168.1.20:5000/api/certificate/verify/${hash}`);
         setResult(res.data);
       } catch {
         setError('Hash tidak ditemukan atau server error');
