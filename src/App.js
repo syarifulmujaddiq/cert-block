@@ -110,7 +110,7 @@ function App() {
             <div className="flex justify-between items-center">
               <button
                 onClick={handleClearForm}
-                className="px-4 py-2 flex gap-2 text-gray-600 hover:text-gray-800 transition-colors"
+                className="px-4 py-2 flex items-center gap-2 text-gray-600 hover:text-gray-800 transition-colors"
               >
                 <Eraser size={16} />
                 Bersihkan

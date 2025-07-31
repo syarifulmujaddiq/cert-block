@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
-import { Upload, File, CheckCircle, AlertCircle, ExternalLink, X } from 'lucide-react';
+import { Upload, File, CheckCircle, AlertCircle, ExternalLink, X, XCircle } from 'lucide-react';
 
 function VerifyCertificateByFile() {
   const [file, setFile] = useState(null);
@@ -83,7 +83,7 @@ function VerifyCertificateByFile() {
       const token = localStorage.getItem('token');
 
       const res = await axios.post(
-        'http://localhost:5000/api/certificate/verify-file',
+        'http://192.168.1.47:5000/api/certificate/verify-file',
         formData,
         {
           headers: {
@@ -262,10 +262,15 @@ function VerifyCertificateByFile() {
               </>
             ) : (
               <>
-                <AlertCircle className="text-red-500 mr-3" size={24} />
-                <h3 className="text-lg font-semibold text-red-800">
-                  Sertifikat Tidak Valid ❌
-                </h3>
+                <div className="flex flex-col items-center justify-center w-full">
+                  <XCircle className="text-red-500" size={40} />
+                  <h2 className="text-lg font-semibold mt-2 text-red-700">
+                    SERTIFIKAT TIDAK VALID
+                  </h2>
+                  <p className="text-gray-600 mt-1 text-center">
+                    Sertifikat ini tidak ditemukan atau tidak terdaftar di blockchain.
+                  </p>
+                </div>
               </>
             )}
           </div>
@@ -286,7 +291,7 @@ function VerifyCertificateByFile() {
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Diterbitkan oleh:
                   </label>
-                  <div className="bg-white p-3 rounded border text-sm">
+                  <div className="bg-white p-3 rounded font-mono border text-sm">
                     {result.issuer}
                   </div>
                 </div>
