@@ -5,7 +5,9 @@ import { Toaster } from 'react-hot-toast';
 import LoginForm from './components/LoginForm';
 import GenerateCertificateForm from './components/GenerateCertificateForm';
 import VerifyCertificateByFile from './components/VerifyCertificateByFile';
-import VerifyByHash from './components/VerifyByHash';
+import VerifyByQr from './components/VerifyByQr';
+
+
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(!!localStorage.getItem('token'));
@@ -19,10 +21,8 @@ function App() {
 
   const handleClearForm = () => {
     if (activeTab === 'generate') {
-      // Clear generate form - dispatch event for GenerateCertificateForm
       window.dispatchEvent(new CustomEvent('clearGenerateForm'));
     } else if (activeTab === 'verify') {
-      // Clear verify form - dispatch event for VerifyCertificateByFile
       window.dispatchEvent(new CustomEvent('clearVerifyForm'));
     }
   };
@@ -35,102 +35,100 @@ function App() {
     }
   };
 
-  const TabContent = () => {
-    return (
-      <div className="min-h-screen bg-gray-50">
-        {/* Header */}
-        <div className="bg-white shadow-sm border-b">
-          <div className="max-w-4xl mx-auto px-6 py-4 flex justify-between items-center">
-            <div className="flex items-center gap-2">
-              <img src='/img/logo-unismuh.jpg' alt='logo unismuh' className='h-14' />
-              <h1 className="text-xl font-semibold text-gray-800">Manajemen Sertifikat</h1>
-            </div>
-            <button
-              onClick={handleLogout}
-              className="flex items-center text-white hover:bg-red-800 transition-colors bg-red-700 p-2 rounded-lg text-sm"
-            >
-              <LogOut size={16} className="mr-2" />
-              Keluar
-            </button>
+  const TabContent = () => (
+    <div className="min-h-screen bg-gray-50">
+      {/* Header */}
+      <div className="bg-white shadow-sm border-b">
+        <div className="max-w-4xl mx-auto px-6 py-4 flex justify-between items-center">
+          <div className="flex items-center gap-2">
+            <img src='/img/logo-unismuh.jpg' alt='logo unismuh' className='h-14' />
+            <h1 className="text-xl font-semibold text-gray-800">Manajemen Sertifikat</h1>
           </div>
+          <button
+            onClick={handleLogout}
+            className="flex items-center text-white hover:bg-red-800 transition-colors bg-red-700 p-2 rounded-lg text-sm"
+          >
+            <LogOut size={16} className="mr-2" />
+            Keluar
+          </button>
         </div>
+      </div>
 
-        {/* Main Content */}
-        <div className="max-w-4xl mx-auto px-6 py-8">
-          <div className="bg-white rounded-lg shadow-sm">
+      {/* Main Content */}
+      <div className="max-w-4xl mx-auto px-6 py-8">
+        <div className="bg-white rounded-lg shadow-sm">
 
-            {/* Tab Navigation */}
-            <div className="px-6 py-4 border-b">
-              <div className="flex space-x-1 bg-gray-100 rounded-lg p-1">
-                <button
-                  onClick={() => setActiveTab('generate')}
-                  className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors ${activeTab === 'generate'
-                    ? 'bg-white text-blue-600 shadow-sm'
-                    : 'text-gray-600 hover:text-gray-800'
-                    }`}
-                >
-                  Buat Sertifikat
-                </button>
-                <button
-                  onClick={() => setActiveTab('verify')}
-                  className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors ${activeTab === 'verify'
-                    ? 'bg-white text-blue-600 shadow-sm'
-                    : 'text-gray-600 hover:text-gray-800'
-                    }`}
-                >
-                  Verifikasi Sertifikat
-                </button>
+          {/* Tab Navigation */}
+          <div className="px-6 py-4 border-b">
+            <div className="flex space-x-1 bg-gray-100 rounded-lg p-1">
+              <button
+                onClick={() => setActiveTab('generate')}
+                className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors ${activeTab === 'generate'
+                  ? 'bg-white text-blue-600 shadow-sm'
+                  : 'text-gray-600 hover:text-gray-800'
+                  }`}
+              >
+                Buat Sertifikat
+              </button>
+              <button
+                onClick={() => setActiveTab('verify')}
+                className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors ${activeTab === 'verify'
+                  ? 'bg-white text-blue-600 shadow-sm'
+                  : 'text-gray-600 hover:text-gray-800'
+                  }`}
+              >
+                Verifikasi Sertifikat
+              </button>
+            </div>
+          </div>
+
+          {/* Tab Content */}
+          <div className="p-6">
+            {activeTab === 'generate' && (
+              <div>
+                <div className="mb-6">
+                  <h2 className="text-lg font-semibold text-gray-800 mb-2">Buat Sertifikat Baru</h2>
+                  <p className="text-gray-600 text-sm">Isi detail sertifikat untuk membuat sertifikat blockchain baru</p>
+                </div>
+                <GenerateCertificateForm />
               </div>
-            </div>
+            )}
 
-            {/* Tab Content */}
-            <div className="p-6">
-              {activeTab === 'generate' && (
-                <div>
-                  <div className="mb-6">
-                    <h2 className="text-lg font-semibold text-gray-800 mb-2">Buat Sertifikat Baru</h2>
-                    <p className="text-gray-600 text-sm">Isi detail sertifikat untuk membuat sertifikat blockchain baru</p>
-                  </div>
-                  <GenerateCertificateForm />
+            {activeTab === 'verify' && (
+              <div>
+                <div className="mb-6">
+                  <h2 className="text-lg font-semibold text-gray-800 mb-2">Verifikasi Sertifikat</h2>
+                  <p className="text-gray-600 text-sm">Unggah sertifikat PDF untuk memverifikasi keasliannya di blockchain</p>
                 </div>
-              )}
+                <VerifyCertificateByFile />
+              </div>
+            )}
+          </div>
 
-              {activeTab === 'verify' && (
-                <div>
-                  <div className="mb-6">
-                    <h2 className="text-lg font-semibold text-gray-800 mb-2">Verifikasi Sertifikat</h2>
-                    <p className="text-gray-600 text-sm">Unggah sertifikat PDF untuk memverifikasi keasliannya di blockchain</p>
-                  </div>
-                  <VerifyCertificateByFile />
-                </div>
-              )}
-            </div>
-
-            {/* Footer Actions */}
-            <div className="px-6 py-4 border-t bg-gray-50 rounded-b-lg">
-              <div className="flex justify-between items-center">
+          {/* Footer Actions */}
+          <div className="px-6 py-4 border-t bg-gray-50 rounded-b-lg">
+            <div className="flex justify-between items-center">
+              <button
+                onClick={handleClearForm}
+                className="px-4 py-2 flex gap-2 text-gray-600 hover:text-gray-800 transition-colors"
+              >
+                <Eraser size={16} />
+                Bersihkan
+              </button>
+              <div className="flex space-x-3">
                 <button
-                  onClick={handleClearForm}
-                  className="px-4 py-2 flex gap-2 text-gray-600 hover:text-gray-800 transition-colors"
+                  onClick={handleSubmitForm}
+                  className="px-6 py-2 bg-blue-800 text-white rounded-md hover:bg-blue-900 transition-colors flex items-center"
                 >
-                  <Eraser size={16} />
-                  Bersihkan
+                  {activeTab === 'generate' ? 'Buat' : 'Verifikasi'}
                 </button>
-                <div className="flex space-x-3">
-                  <button
-                    onClick={handleSubmitForm}
-                    className="px-6 py-2 bg-blue-800 text-white rounded-md hover:bg-blue-900 transition-colors flex items-center"
-                  >
-                    {activeTab === 'generate' ? 'Buat' : 'Verifikasi'}
-                  </button>
-                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    );
-  };
+    </div>
+  );
 
   return (
     <Router>
@@ -167,7 +165,7 @@ function App() {
       />
       <Routes>
         {/* Route publik untuk verifikasi via hash (scan QR) */}
-        <Route path="/verify/:hash" element={<VerifyByHash />} />
+        <Route path="/verify/:hash" element={<VerifyByQr />} />
 
         {/* Route utama (login & admin) */}
         <Route

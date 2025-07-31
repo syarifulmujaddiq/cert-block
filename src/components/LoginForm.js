@@ -36,7 +36,7 @@ function LoginForm({ onLogin }) {
     try {
       if (isLogin) {
         // Login logic
-        const res = await axios.post('http://192.168.1.20:5000/api/auth/login', {
+        const res = await axios.post('http://localhost:5000/api/auth/login', {
           username: formData.email,
           password: formData.password
         });
@@ -44,7 +44,7 @@ function LoginForm({ onLogin }) {
         if (onLogin) onLogin();
       } else {
         // Register logic
-        const res = await axios.post('http://192.168.1.20:5000/api/auth/register', {
+        const res = await axios.post('http://localhost:5000/api/auth/register', {
           name: formData.name,
           email: formData.email,
           password: formData.password

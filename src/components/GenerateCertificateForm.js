@@ -28,7 +28,7 @@ function GenerateCertificateForm() {
     try {
       const token = localStorage.getItem('token');
       const res = await axios.post(
-        'http://192.168.1.20:5000/api/certificate/generate',
+        'http://localhost:5000/api/certificate/generate',
         form,
         {
           headers: { Authorization: `Bearer ${token}` }
@@ -173,14 +173,25 @@ function GenerateCertificateForm() {
                 Lihat di IPFS
               </a>
               <a
-                href={`http://192.168.1.20:5000${result.downloadUrl}`}
+                href={`http://localhost:5000${result.downloadUrl}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center justify-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
               >
                 <Download className="mr-2" size={16} />
                 Unduh Sertifikat
+              </a>  
+              {/* Tambahkan Download QR */}
+              <a
+                 href={`http://localhost:5000${result.downloadQrUrl}`}
+                 target="_blank"
+                 rel="noopener noreferrer"
+                 className="flex items-center justify-center px-4 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition-colors"
+                >
+                  <Download className="mr-2" size={16} />
+                  Unduh QR Code
               </a>
+              
             </div>
           </div>
         </div>
