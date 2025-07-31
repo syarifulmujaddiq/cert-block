@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import toast from 'react-hot-toast';
 import { UserPlus, Eye, EyeOff, User } from 'lucide-react';
 
 function LoginForm({ onLogin }) {
@@ -33,6 +34,14 @@ function LoginForm({ onLogin }) {
     setLoading(true);
     setError('');
 
+    // Show loading toast
+    const loadingToast = toast.loading(isLogin ? 'Sedang masuk...' : 'Sedang mendaftar...', {
+      style: {
+        background: '#3b82f6',
+        color: '#fff',
+      },
+    });
+
     try {
       if (isLogin) {
         // Login logic
@@ -41,6 +50,17 @@ function LoginForm({ onLogin }) {
           password: formData.password
         });
         localStorage.setItem('token', res.data.token);
+
+        // Dismiss loading toast and show success
+        toast.dismiss(loadingToast);
+        toast.success('Login berhasil! Selamat datang! 🎉', {
+          duration: 3000,
+          style: {
+            background: '#10b981',
+            color: '#fff',
+          },
+        });
+
         if (onLogin) onLogin();
       } else {
         // Register logic
@@ -49,11 +69,32 @@ function LoginForm({ onLogin }) {
           email: formData.email,
           password: formData.password
         });
-        alert('Berhasil mendaftar!');
+
+        // Dismiss loading toast and show success
+        toast.dismiss(loadingToast);
+        toast.success('Berhasil mendaftar! Silakan login dengan akun Anda.', {
+          duration: 4000,
+          style: {
+            background: '#10b981',
+            color: '#fff',
+          },
+        });
+
         setIsLogin(true);
       }
     } catch (err) {
-      setError(err.response?.data?.message || (isLogin ? 'Login gagal' : 'Pendaftaran gagal'));
+      const errorMessage = err.response?.data?.message || (isLogin ? 'Login gagal' : 'Pendaftaran gagal');
+      setError(errorMessage);
+
+      // Dismiss loading toast and show error
+      toast.dismiss(loadingToast);
+      toast.error(errorMessage, {
+        duration: 5000,
+        style: {
+          background: '#ef4444',
+          color: '#fff',
+        },
+      });
     } finally {
       setLoading(false);
     }

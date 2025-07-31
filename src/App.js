@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { LogOut, Eraser } from 'lucide-react';
-import { Toaster } from 'react-hot-toast';
+import { LogOut, Eraser, AlertTriangle } from 'lucide-react';
+import { Toaster, toast } from 'react-hot-toast';
 import LoginForm from './components/LoginForm';
 import GenerateCertificateForm from './components/GenerateCertificateForm';
 import VerifyCertificateByFile from './components/VerifyCertificateByFile';
@@ -14,9 +14,51 @@ function App() {
   const [activeTab, setActiveTab] = useState('generate');
 
   const handleLogout = () => {
-    localStorage.removeItem('token');
-    setLoggedIn(false);
-    setActiveTab('generate');
+    // Show confirmation toast
+    toast.custom((t) => (
+      <div className={`${t.visible ? 'animate-enter' : 'animate-leave'} max-w-md w-full bg-white shadow-lg rounded-lg pointer-events-auto flex ring-1 ring-black ring-opacity-5`}>
+        <div className="flex-1 w-0 p-4">
+          <div className="flex items-start">
+            <div className="flex-shrink-0 pt-0.5">
+              <AlertTriangle className="h-10 w-10 text-amber-500" />
+            </div>
+            <div className="ml-3 flex-1">
+              <p className="text-sm font-medium text-gray-900">
+                Konfirmasi Logout
+              </p>
+              <p className="mt-1 text-sm text-gray-500">
+                Apakah Anda yakin ingin keluar dari sistem?
+              </p>
+            </div>
+          </div>
+        </div>
+        <div className="flex border-l border-gray-200">
+          <button
+            onClick={() => {
+              toast.dismiss(t.id);
+              localStorage.removeItem('token');
+              setLoggedIn(false);
+              setActiveTab('generate');
+              toast.success('Berhasil keluar dari sistem', {
+                duration: 2000,
+              });
+            }}
+            className="w-full border border-transparent rounded-none rounded-r-lg p-4 flex items-center justify-center text-sm font-medium text-red-600 hover:text-red-500 focus:outline-none focus:ring-2 focus:ring-red-500"
+          >
+            Ya
+          </button>
+          <button
+            onClick={() => toast.dismiss(t.id)}
+            className="w-full border border-transparent rounded-none rounded-r-lg p-4 flex items-center justify-center text-sm font-medium text-gray-600 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-500 border-l border-gray-200"
+          >
+            Tidak
+          </button>
+        </div>
+      </div>
+    ), {
+      duration: Infinity,
+      position: 'top-center',
+    });
   };
 
   const handleClearForm = () => {

@@ -83,7 +83,7 @@ function VerifyCertificateByFile() {
       const token = localStorage.getItem('token');
 
       const res = await axios.post(
-        'http://192.168.1.47:5000/api/certificate/verify-file',
+        'http://localhost:5000/api/certificate/verify-file',
         formData,
         {
           headers: {

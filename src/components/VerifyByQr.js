@@ -17,7 +17,7 @@ function VerifyByQr() {
       setError("");
       try {
         const res = await axios.get(
-          `http://192.168.1.47:5000/api/certificate/verify/${hash}` //ip nya ganti menggunakan ip yang sama di wifi yang sama
+          `http://localhost:5000/api/certificate/verify/${hash}` //ip nya ganti menggunakan ip yang sama di wifi yang sama
         );
         setResult(res.data);
       } catch (err) {
@@ -32,7 +32,7 @@ function VerifyByQr() {
     if (hash) fetchStatus();
   }, [hash]);
 
-   return (
+  return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center p-6">
       <div className="bg-white shadow rounded-lg max-w-4xl w-full p-8 border">
         <div className="flex flex-col items-center">
